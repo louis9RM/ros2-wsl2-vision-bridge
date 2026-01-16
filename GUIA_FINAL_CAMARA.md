@@ -34,12 +34,23 @@ winget install Gyan.FFmpeg
 
 Sigue estos 3 pasos cada vez que quieras trabajar con la cámara.
 
+### Paso 0: Construir y Levantar el Contenedor (Primera vez)
+
+Si acabas de clonar el proyecto (o si reiniciaste tu PC), necesitas levantar el contenedor primero:
+
+1.  Abre una terminal en la carpeta del proyecto.
+2.  Ejecuta:
+    ```powershell
+    docker compose up -d --build
+    ```
+    *Esto descargará ROS 2, instalará las librerías y dejará el sistema listo.*
+
 ### Paso 1: Configurar la IP (Solo si cambia)
 
 Dado que Windows y WSL son redes distintas, el contenedor necesita saber a qué dirección conectarse.
 
 1.  Abre PowerShell en Windows y ejecuta: `ipconfig`
-2.  Busca el adaptador **"vEthernet (WSL)"** y copia su **Dirección IPv4** (ej: `172.28.192.1`).
+2.  Busca el adaptador **"vEthernet (WSL)"** y copia su **Dirección IPv4** (ej: `17x.2x.19x.1`).
 3.  Abre el archivo `src/udp_camera_node.py` en este repo.
 4.  Busca la línea que dice `tcpclientsrc host=...` y pega tu IP ahí.
 
