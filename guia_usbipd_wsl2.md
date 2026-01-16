@@ -2,7 +2,24 @@
 
 Esta guía detalla los pasos para conectar una cámara web integrada (u otro dispositivo USB) a una instancia de WSL 2 utilizando `usbipd-win`.
 
+
+## 0. Requisitos e Instalación
+
+Antes de comenzar, necesitas tener instalado **usbipd-win**.
+
+### Opción A: Instalación vía Winget (Recomendado)
+Abre PowerShell y ejecuta:
+```powershell
+winget install usbipd-win
+```
+*Nota: Es posible que necesites reiniciar la terminal o el equipo después de la instalación.*
+
+### Opción B: Descarga Manual
+Si prefieres el instalador `.msi`, descárgalo desde el repositorio oficial en GitHub:
+[🔗 Descargar usbipd-win (Latest Release)](https://github.com/dorssel/usbipd-win/releases)
+
 ## 1. Diagnóstico Inicial
+
 
 Primero, debemos identificar el dispositivo USB que queremos compartir. Abre **PowerShell** y ejecuta el siguiente comando:
 
@@ -54,7 +71,10 @@ usbipd: error: There is no WSL 2 distribution running.
 
 Para evitar el error anterior, sigue estos pasos en orden:
 
-1.  **Abre tu terminal de Linux (Ubuntu/Debian, etc.)**. Mantén esta ventana abierta.
+1.  **Abre tu terminal de Linux (Ubuntu/Debian, etc.)**. Mantén esta ventana abierta. Puedes hacerlo buscando "Ubuntu" en el menú Inicio o ejecutando en una *nueva* pestaña de PowerShell:
+    ```powershell
+    wsl
+    ```
 2.  Regresa a tu ventana de **PowerShell** (puede ser la de usuario normal o admin).
 3.  Ejecuta el comando de conexión nuevamente:
 
