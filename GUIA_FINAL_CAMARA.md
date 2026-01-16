@@ -93,7 +93,7 @@ Para confirmar que ROS 2 está recibiendo las imágenes:
 
 ## 🏗️ Diagrama de Arquitectura
 
-Puedes visualizar el flujo de datos con este digrama (copia este código en un visor Mermaid o GitHub):
+Puedes visualizar el flujo de datos con este digrama:
 
 ```mermaid
 graph TD
@@ -123,3 +123,27 @@ graph TD
         PythonNode -->|Publish Image| ROS_Topic
     end
 ```
+
+---
+
+## 🔍 Explicación de Componentes
+
+Aquí detallamos qué hace cada pieza del sistema y por qué es necesaria:
+
+### 1. FFmpeg (En Windows)
+*   **Función**: Actúa como el "cerebro" que controla la cámara física. Windows tiene los drivers perfectos para la webcam (algo que falla en WSL), así que usamos FFmpeg para leer la cámara y convertir el video en datos digitales puros (H.264).
+*   **Por qué TCP**: Configuramos FFmpeg en modo "Listen" (Escucha), creando un servidor en el puerto 5000. Esto simula ser una cámara IP.
+
+### 2. WSL 2 Network Bridge (vEthernet)
+*   **Función**: Es el cable de red virtual que conecta tu sistema Windows con el "mundo Linux" de WSL 2.
+*   **El Reto**: Por defecto, WSL 2 tiene su propia IP. Por eso necesitamos decirle al cliente (Docker) que busque la IP del host (Windows), que es la dirección `172.x.x.1` que configuramos.
+
+### 3. GStreamer (En Docker)
+*   **Función**: Es una librería multimedia muy potente dentro de Linux.
+*   **Rol**: Recibe los paquetes de datos "crudos" que llegan por la red, los ordena y los decodifica para convertirlos en imágenes que ROS pueda entender. Es mucho más robusto que OpenCV para video en streaming.
+
+### 4. Nodo ROS 2 (`udp_camera_node.py`)
+*   **Función**: Es el intermediario final.
+    *   Toma la imagen descifrada por GStreamer.
+    *   La convierte a un mensaje de ROS 2 (`sensor_msgs/Image`).
+    *   La publica en el topic `/image_raw` para que cualquier otro nodo de tu robot (visión artificial, SLAM, etc.) pueda usarla.
