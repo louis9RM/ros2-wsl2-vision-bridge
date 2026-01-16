@@ -1,0 +1,23 @@
+services:
+  ros2_vision:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ros2_vision_bridge
+    container_name: ros2_vision_container
+    # Network streaming does not need privileged or devices
+    # privileged: true
+    # devices:
+    #   - /dev/video0:/dev/video0
+    ports:
+      - "5000:5000/udp"
+    volumes:
+      - .:/ros2_ws/src
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      # IMPORTANT: Host networking might conflict with port mapping on some systems,
+      # but usually needed for GUI. For UDP, we can try 'host' first.
+      # If 'network_mode: host' is used, 'ports' is ignored (all ports open).
+    network_mode: host
+    command: sleep infinity
