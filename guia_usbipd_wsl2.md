@@ -5,18 +5,22 @@ Esta guía detalla los pasos para conectar una cámara web integrada (u otro dis
 
 ## 0. Requisitos e Instalación
 
-Antes de comenzar, necesitas tener instalado **usbipd-win**.
+## 0. Requisitos Previos
 
-### Opción A: Instalación vía Winget (Recomendado)
-Abre PowerShell y ejecuta:
+### A. Verificar WSL (Subsistema de Linux)
+Si no estás seguro de tener Linux instalado, abre PowerShell y ejecuta `wsl`. Si obtienes un error, instálalo con este comando y reinicia tu PC:
+
+```powershell
+wsl --install
+```
+
+### B. Instalar usbipd-win
+La forma más fácil de instalar es usando Winget. Abre PowerShell y ejecuta:
+
 ```powershell
 winget install usbipd-win
 ```
 *Nota: Es posible que necesites reiniciar la terminal o el equipo después de la instalación.*
-
-### Opción B: Descarga Manual
-Si prefieres el instalador `.msi`, descárgalo desde el repositorio oficial en GitHub:
-[🔗 Descargar usbipd-win (Latest Release)](https://github.com/dorssel/usbipd-win/releases)
 
 ## 1. Diagnóstico Inicial
 
@@ -49,42 +53,24 @@ usbipd bind --busid 2-9
 
 Esto configura la persistencia del dispositivo, permitiendo que sea compartido.
 
-## 3. El Error de Instancia Cerrada
+## 3. Conexión del Dispositivo
 
-Este es un punto crítico donde muchos fallan. Si intentas conectar el dispositivo (`attach`) **sin tener una terminal de WSL 2 (Linux) abierta**, recibirás un error.
+Para conectar la cámara, **es obligatorio tener la terminal de Linux abierta**. Si no lo haces, `usbipd` no tendrá dónde "inyectar" el dispositivo.
 
-Intento fallido (sin terminal Linux abierta):
+1.  **Abre tu terminal de Linux** (Ubuntu/Debian).
+    *   Puedes buscar "Ubuntu" en el menú Inicio.
+    *   O ejecutar `wsl` en una nueva pestaña de PowerShell.
+    *   **¡Déjala abierta!**
 
-```powershell
-usbipd attach --wsl --busid 2-9
-```
+2.  En tu ventana de **PowerShell (Admin)**, ejecuta el comando de conexión:
 
-**Resultado del error:**
-```text
-usbipd: error: There is no WSL 2 distribution running.
-```
-
-> [!WARNING]
-> **Error Común**: Este error ocurre porque `usbipd` necesita una instancia de WSL activa para inyectar el dispositivo USB. No basta con tener WSL instalado; el sistema "invitado" debe estar corriendo.
-
-## 4. Solución y Conexión
-
-Para evitar el error anterior, sigue estos pasos en orden:
-
-1.  **Abre tu terminal de Linux (Ubuntu/Debian, etc.)**. Mantén esta ventana abierta. Puedes hacerlo buscando "Ubuntu" en el menú Inicio o ejecutando en una *nueva* pestaña de PowerShell:
     ```powershell
-    wsl
+    usbipd attach --wsl --busid 2-9
     ```
-2.  Regresa a tu ventana de **PowerShell** (puede ser la de usuario normal o admin).
-3.  Ejecuta el comando de conexión nuevamente:
 
-```powershell
-usbipd attach --wsl --busid 2-9
-```
+Si todo funciona bien, el comando no mostrará errores y terminará silenciosamente (o mostrará "Attached").
 
-Si todo funciona correctamente, no verás ningún mensaje de error y el cursor volverá a la línea de comandos, o verás un mensaje de éxito dependiendo de la versión.
-
-## 5. Validación Final
+## 4. Validación Final
 
 Para confirmar que la cámara está correctamente conectada y reconocida por Linux:
 
