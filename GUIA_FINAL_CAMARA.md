@@ -6,6 +6,25 @@ El objetivo es permitir que un contenedor Docker (corriendo en WSL 2) acceda a l
 
 ---
 
+## ⚡ Inicio Rápido para la Comunidad
+
+Si acabas de llegar a este repositorio, empieza aquí:
+
+1.  **Clona el repositorio**:
+    ```powershell
+    git clone <URL_DEL_REPOSITORIO>
+    cd ros2-wsl2-vision-bridge
+    ```
+
+2.  **Construye el entorno**:
+    ```powershell
+    docker compose up -d --build
+    ```
+
+3.  ¡Listo! Ahora salta al **Paso 1** de las instrucciones de inicio.
+
+---
+
 ## 🛠️ Requisitos Previos e Instalación
 
 Si estás configurando esto desde cero en una máquina nueva, necesitas instalar:
