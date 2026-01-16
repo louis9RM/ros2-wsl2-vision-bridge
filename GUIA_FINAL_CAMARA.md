@@ -21,7 +21,7 @@ Si acabas de llegar a este repositorio, empieza aquí:
     docker compose up -d --build
     ```
 
- ```powershell
+    ```powershell
     docker compose up -d
     ```
 
