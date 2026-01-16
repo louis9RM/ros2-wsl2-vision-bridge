@@ -91,6 +91,35 @@ Para confirmar que ROS 2 está recibiendo las imágenes:
 
 ---
 
-## ❓ ¿Por qué usamos este método?
+## 🏗️ Diagrama de Arquitectura
 
-*   **TCP Streaming**: Es un método universal que evita los problemas de drivers de WSL 2 y firewalls estrictos. Windows maneja el hardware y Docker solo recibe los datos puros.
+Puedes visualizar el flujo de datos con este digrama (copia este código en un visor Mermaid o GitHub):
+
+```mermaid
+graph TD
+    subgraph Windows_Host [Windows 11 Host]
+        style Windows_Host fill:#0078D4,color:white
+        Webcam(("/dev/video (Hardware Camera)"))
+        FFmpeg["FFmpeg Process<br/>(stream_camera_tcp.ps1)"]
+        
+        Webcam -->|DirectShow| FFmpeg
+        FFmpeg -.->|TCP Listen :5000| Port5000((Port 5000))
+    end
+
+    subgraph WSL2_Network [WSL 2 Network Bridge]
+        style WSL2_Network fill:#f9f,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5
+        IP_Link["vEthernet Link<br/>(172.28.x.1)"]
+    end
+
+    subgraph Docker_Container [Docker Container: ros2_vision]
+        style Docker_Container fill:#d63384,color:white
+        PythonNode["ROS 2 Node<br/>(udp_camera_node.py)"]
+        GStreamer["GStreamer Pipeline<br/>(tcpclientsrc)"]
+        ROS_Topic["/image_raw"]
+
+        Port5000 -->|TCP Connect| IP_Link
+        IP_Link -->|Data Stream| GStreamer
+        GStreamer -->|Decode H.264| PythonNode
+        PythonNode -->|Publish Image| ROS_Topic
+    end
+```
