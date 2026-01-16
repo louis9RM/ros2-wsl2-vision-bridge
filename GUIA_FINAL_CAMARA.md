@@ -21,6 +21,11 @@ Si acabas de llegar a este repositorio, empieza aquí:
     docker compose up -d --build
     ```
 
+ ```powershell
+    docker compose up -d
+    ```
+
+
 3.  ¡Listo! Ahora salta al **Paso 1** de las instrucciones de inicio.
 
 ---
